@@ -28,7 +28,12 @@ def countsequences(file_name, mode='r+'):
 			count += 1
 		print('total number of sequences to be downloaded: ', int(count))
 countlines('{}_acc.acc'.format(details["taxon"]))
+if input("Do You Wish To Continue? [y/n]") == "y":
+	print("continuing")
+else:
+	sys.exit(0)
 
+print("Downloading sequences")
 #Esearch using Edirect
 esearch_command="esearch -db protein -query '{0}[organism] AND {1}[Protein name] NOT PARTIAL' | efetch -db protein -format fasta > {0}_esearch.fa ".format(details["taxon"], details["protein_family"])
 os.system(esearch_command)
