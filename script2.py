@@ -27,7 +27,7 @@ def countsequences(file_name, mode='r+'):
 		for _ in f:
 			count += 1
 		print('total number of sequences to be downloaded: ', int(count))
-countlines('{}_acc.acc'.format(details["taxon"]))
+countsequences('{}_acc.acc'.format(details["taxon"]))
 if input("Do You Wish To Continue? [y/n]") == "y":
 	print("continuing")
 else:
@@ -39,10 +39,13 @@ esearch_command="esearch -db protein -query '{0}[organism] AND {1}[Protein name]
 os.system(esearch_command)
 subprocess.call(esearch_command, shell=True)
 #Clustalo
-subprocess.call("clustalo -i {0}_esearch.fa -o {0}_clustalo.fa -v".format(details["taxon"]), shell=True)
+#subprocess.call("clustalo -i {0}_esearch.fa -o {0}_clustalo.fa -v".format(details["taxon"]), shell=True)
 
 #Alignment of sequences obtained from edirect search
 #subprocess.call("aligncopy -sprotein1 -sequences *_esearch.fa -outfile {}_alignment.fa".format(taxon), shell=True)
 
 #Determine and plot level of protein sequence conservation across the species within that taxonomic group
-subprocess.call("plotcon -sprotein1 -sequences {0}_clustalo.fa -winsize 10 -graph x11 ".format(details["taxon"]), shell=True)
+if input("Do You Wish To Download Your Conservation Plot? [y/n]") == "y":
+	subprocess.call("plotcon -sprotein1 -sequences {0}.fa -winsize 10 -graph svg -goutfile {0}_conservation_plot ".format(details["taxon"]), shell=True)
+else:
+	subprocess.call("plotcon -sprotein1 -sequences {0}.fa -winsize 10 -graph x11 ".format(details["taxon"]), shell=True)
