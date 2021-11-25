@@ -2,8 +2,8 @@
 import os, subprocess, sys, re, glob
 
 #USER INPUT 
-print("Please navigate to the directory you wish to output data before starting the analysis")
-print("Program will write outputs to the \'Assignment2\' folder in the current directory.")
+print("\n Hello, welcome to B118056's Python 3 script\n Please make sure you are in the directory you wish to output data before starting the analysis")
+print(" Program will write outputs to the \'Assignment2\' folder in the current directory.")
 
 def Personal(taxon, protein_family) :
    import string
@@ -18,7 +18,7 @@ Personal(*list(details.values()))
 def User_continue():
    resp = input ("Do you wish to continue?\nContinue [1]\nRedefine Query [2]\nExit [3]\n")
    if resp == "1":
-      print("continuing analysis..")
+      print("Continuing analysis..\n")
    elif resp == "2":
       details["taxon"] = input("What is your taxon of interest\n\t> ")
       details["protein_family"]=input("What is the protein family\n\t> ")
@@ -27,7 +27,7 @@ def User_continue():
    elif resp == "3":
       sys.exit()
    else:
-      print ("Sorry, that was an invalid command. Please try again!")
+      print ("Sorry, that was not an integer. Please try again!")
       User_continue()
 
 User_continue()
@@ -44,11 +44,12 @@ def Countsequences(file_name, mode='r+'):
       print('\n\nTotal number of sequences to be downloaded: ', int(count))
    resp = input("Do You Wish To Continue? [y/n]")
    if resp == "y":
-      print("Proceeding to download sequences")
+      print("Proceeding to download sequences \n")
    elif resp == "n":
       sys.exit(0)
    else:
       print ("Sorry, that was an invalid command. Please try again!")
+      Countsequences()
 
 Countsequences('{}_acc.acc'.format(details["taxon"]))
 
@@ -79,18 +80,30 @@ print("\n\nData was successfully aligned \n\n")
 subprocess.call('cons -sequence {0}_clustalo.fa -outseq {0}_alignment.fa'.format(details["taxon"]), shell=True)
 subprocess.call('blastp -db reference -query {0}_alignment.fa -outfmt "6 sseqid sseq" > {0}_blastoutput.out'.format(details["taxon"]), shell=True)
 
+#Converting the blastoutput into fasta file
+subprocess.call("sed 's/^/>/' {0}_blastoutput.out > temp".format(details["taxon"]), shell = True)
+
+#replacing each tab with a newline to get a fasta format
+text = open("temp").read()
+text = text.replace('\t', '\n')
+f = open("{0}_aligned.fa".format(details["taxon"]), "w")
+f.write(text)
+f.close()
+
 #Determine and plot level of protein sequence conservation across the species within that taxonomic group
 #Allow user to decide whether to save their plot as an output  
 def Download_plot():
 
    resp = input("Do You Wish To Download Your Conservation Plot? [y/n]")
    if resp == "y":
-      subprocess.call("plotcon -sprotein1 -sequences {0}_blastoutput.out -winsize 4 -graph svg -goutfile {0}_conservation_plot ".format(details["taxon"]), shell=True)
+      subprocess.call("plotcon -sprotein1 -sequences {0}_aligned.fa -winsize 4 -graph svg -goutfile {0}_conservation_plot ".format(details["taxon"]), shell=True)
    elif resp == "n":
-      subprocess.call("plotcon -sprotein1 -sequences {0}_blastoutput.out -winsize 4 -graph x11 ".format(details["taxon"]), shell=True)
+      subprocess.call("plotcon -sprotein1 -sequences {0}_aligned.fa -winsize 4 -graph x11 ".format(details["taxon"]), shell=True)
    else:
       print ("Sorry, that was an invalid command. Please try again!")
       Download_plot()
+
+Download_plot()
 
 if not os.path.exists("individual_sequences"):
    os.mkdir("individual_sequences")
@@ -150,7 +163,7 @@ with open("all_prosite.txt", "wb") as outfile:
 #now lets look for elements in the summary file
 all = open("all_prosite.txt").read()
 
-print("In this dataset:")
+print("\n\nIn this dataset:")
 
 #sequences with motifs
 nmotifs = re.findall(r'Motif = .+', all)
@@ -164,4 +177,6 @@ print("The different motifs present in the sequences are: ", dmotifs)
 #number of sequences for each motif 
 for i in dmotifs:
    n=nmotifs.count(i)
-   print("There are ", n, "occurences of ", i, "in all sequences")
+   print("\nThere are ", n, "occurences of ", i, "in all sequences")
+
+print("\nAnalysis terminated. Enjoy your day!")
