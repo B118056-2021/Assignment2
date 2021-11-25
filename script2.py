@@ -179,4 +179,21 @@ for i in dmotifs:
    n=nmotifs.count(i)
    print("\nThere are ", n, "occurences of ", i, "in all sequences")
 
+
+##WILDCARD
+os.chdir("..")
+
+def Wild_card():
+   resp = input("Do You Wish To Calculate The Evolutionary Distance Between Every Pair Of Sequences For Your Protein Alignment? [y/n]")
+   if resp == "y":
+      subprocess.call("distmat -sequence {0}_aligned.fa -protmethod 1 -outfile {0}.distmat".format(details["taxon"]), shell=True)
+      print("Distance matrix saved as distmat.")
+   elif resp == "n":
+      print ("Skipping step...")
+   else:
+      print ("Sorry, that was an invalid command. Please try again!")
+      Wild_card()
+
+Wild_card()
+
 print("\nAnalysis terminated. Enjoy your day!")
