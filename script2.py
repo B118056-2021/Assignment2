@@ -15,8 +15,9 @@ os.chdir("Assignment2")
 #create a function that takes as inputs the taxon and protein family the user is interested in
 def Personal(taxon, protein_family) :
    import string
-   return print("\nYou have provided the following details for your search:\n\tTaxon: ",taxon,"\n\tProtein Family: ",protein_family, "\n")
+   return print("\nYou have provided the following details for your search:\n\tTaxon: ",taxon,"\n\tProtein Family: ",protein_family)
 
+#dictionnary with keys taxon and protein family and values are obtained from the user's query
 details={}
 details["taxon"] = input("What is your taxon of interest\n\t> ")
 details["protein_family"]=input("What is the protein family\n\t> ")
@@ -26,7 +27,7 @@ Personal(*list(details.values()))
 
 #allows user to check what input they have entered and let's them decide whether they want to continue with their search
 def User_continue():
-   resp = input ("Do you wish to continue?\nContinue [1]\nRedefine Query [2]\nExit [3]\n")
+   resp = input ("\nDo you wish to continue?\nContinue [1]\nRedefine Query [2]\nExit [3]\n")
    if resp == "1":
       print("Continuing analysis..\n")
    elif resp == "2":
@@ -37,7 +38,7 @@ def User_continue():
    elif resp == "3":
       sys.exit()
    else:
-      print ("Sorry, that was not an integer. Please try again!")
+      print ("Sorry, that was an invalid command. Please try again!")
       User_continue()
 
 User_continue()
@@ -111,20 +112,20 @@ def Download_plot():
    print("\n\nPerforming A Conservation Analysis Of The Aligned Sequences.")
    resp = input("Do You Wish To: \nDownload And Visualise Your Conservation Plot [1] \nOnly Visualise Your Plot [2] \nOnly Download Your Plot [3]\n")
    if resp == "1":
-      print("\nPlease enter a size of windows for your plot. Default value is 4!")
+      print("\nPlease enter a window size for your plot. Default value is 4!")
       print("Larger windows will result in smoother plots at loss of sensitivity\n")
-      subprocess.call("plotcon -sprotein1 -sequences {0}_aligned.fa -graph svg -goutfile {0}_conservation_plot ".format(details["taxon"]), shell=True)
+      subprocess.call("plotcon -sprotein1 -sequences {0}_aligned.fa -graph svg -goutfile {0}_conservation_plot".format(details["taxon"]), shell=True)
       subprocess.call("plotcon -sprotein1 -sequences {0}_aligned.fa -graph x11 ".format(details["taxon"]), shell=True)
    elif resp == "2":
-      print("\nPlease enter a size of windows for your plot. Default value is 4!")
+      print("\nPlease enter a window size for your plot. Default value is 4!")
       print("Larger windows will result in smoother plots at loss of sensitivity\n")
       subprocess.call("plotcon -sprotein1 -sequences {0}_aligned.fa -graph x11 ".format(details["taxon"]), shell=True)
    elif resp == "3":
-      print("\nPlease enter a size of windows for your plot. Default value is 4!")
+      print("\nPlease enter a window size for your plot. Default value is 4!")
       print("Larger windows will result in smoother plots at loss of sensitivity\n")
-      subprocess.call("plotcon -sprotein1 -sequences {0}_aligned.fa -graph svg -goutfile {0}_conservation_plot ".format(details["taxon"]), shell=True)
+      subprocess.call("plotcon -sprotein1 -sequences {0}_aligned.fa -graph svg -goutfile {0}_conservation_plot".format(details["taxon"]), shell=True)
    else:
-      print ("Sorry, you did not enter an integer. Please try again!")
+      print ("Sorry, that was an invalid command. Please try again!")
       Download_plot()
 
 Download_plot()
@@ -225,13 +226,13 @@ def Wild_card():
 
 Wild_card()
 
+print("\nAnalysis finished. Enjoy your day!\n\n")
+
 #creating a summary file from the PROSITE analsyis
 #code doesn't work if it is put earlier on...
-sys.stdout = open("prosite_summary.txt", "w")
+sys.stdout = open("PROSITE_summary.txt", "w")
 print("From the input dataset:")
 print("A motif has been identified: ", lenmotifs, "times")
 print("The different motifs present in the sequences are:", dmotifs)
 print("There are", n, "occurences of", i, "in all sequences")
 sys.stdout.close()
-
-print("\nAnalysis terminated. Enjoy your day!\n\n")
