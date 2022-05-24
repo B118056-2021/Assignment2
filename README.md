@@ -6,4 +6,4 @@ Interactive Python script that allows user to:
   3. Perform evolutionary distance analysis (EMBOSS tool)
 
 
-<img src="https://user-images.githubusercontent.com/91611978/170044552-f9871fcf-e4fa-4b23-953d-c5d74fc98f85.png" width="1000" height="1200">
+<img src="https://user-images.githubusercontent.com/91611978/170044552-f9871fcf-e4fa-4b23-953d-c5d74fc98f85.png" width="1000" height="1150">
